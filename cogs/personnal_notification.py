@@ -34,11 +34,6 @@ class Join(commands.Cog):
                     ephemeral=True)
                 add_user(str(interaction.user.id), None, False)
                 await send_first_personnal_notifications(interaction.user)
-        else:
-            await interaction.response.send_message(
-                "⚠️ - **Vous devez spécifier un pseudo !** ❌",
-                delete_after=5,
-                ephemeral=True)
 
 
 # COMMAND '/leave' : Indicates that the player has leaved the server
@@ -69,15 +64,15 @@ async def send_first_personnal_notifications(user):
     embed = Embed(
         title="Première notification personnelle",
         description=("Salut,\n\n"
-                     "Tu viens d'activer tes notifications personnelles !\n"
-                     "Bonne session de jeu ! 😄\n\n"
-                     "Aujourd'hui, pense bien à : \n"
-                     "- Tes pets -> /pets\n"
-                     "- Tes 2 votes -> /vote\n"
-                     "- Tes récompenses -> /rewards\n"
-                     "- Ton vip -> /vip\n"
-                     "- Ta quête journalière -> /jobs\n\n"
-                     "Bonne session 😘"),
+                    "Tu viens d'activer tes notifications personnelles !\n"
+                    "Bonne session de jeu ! 😄\n\n"
+                    "Aujourd'hui, pense bien à : \n"
+                    "- Tes pets -> /pets\n"
+                    "- Tes 2 votes -> /vote\n"
+                    "- Tes récompenses -> /rewards\n"
+                    "- Ton vip -> /vip\n"
+                    "- Ta quête journalière -> /jobs\n\n"
+                    "Bonne session 😘"),
         color=0x00ff00)
     await user.send(f"{user.mention}", embed=embed)
 
@@ -112,6 +107,7 @@ class PersonnalNotifications(commands.Cog):
             for key, value in onlines.items():
                 now = datetime.now(tz)
                 user = await self.bot.fetch_user(int(key))
+                user_id = user.id
 
                 # 3h00 : PETS
                 elapsed = now - datetime.fromisoformat(value[1])
@@ -119,9 +115,9 @@ class PersonnalNotifications(commands.Cog):
                     embed = Embed(
                         title="Rappel des pets",
                         description=("Salut,\n\n"
-                                     "C'est l'heure d'aller check tes pets !\n"
-                                     "J'espère qu'ils sont pleins 😄\n\n"
-                                     "À plus ! 😘"),
+                                    "C'est l'heure d'aller check tes pets !\n"
+                                    "J'espère qu'ils sont pleins 😄\n\n"
+                                    "À plus ! 😘"),
                         color=0x00ff00)
                     await user.send(f"{user.mention}", embed=embed)
                     update_pets_status(key, now.isoformat())  # Met à jour l'heure du dernier rappel des pets
@@ -175,12 +171,12 @@ class PersonnalNotifications(commands.Cog):
                     embed = Embed(
                         title="Notification vip & rewards 23:00",
                         description=("Salut,\n\n"
-                                     "Il est 23:00 ! (et oui déjà...)\n"
-                                     "Bientôt la fin de journée 😄\n\n"
-                                     "Donc pense bien à : \n"
-                                     "- Tes récompenses -> /rewards\n"
-                                     "- Ton vip -> /vip\n\n"
-                                     "Bonne soirée 😘"),
+                                    "Il est 23:00 ! (et oui déjà...)\n"
+                                    "Bientôt la fin de journée 😄\n\n"
+                                    "Donc pense bien à : \n"
+                                    "- Tes récompenses -> /rewards\n"
+                                    "- Ton vip -> /vip\n\n"
+                                    "Bonne soirée 😘"),
                         color=0x00ff00)
                     await user.send(f"{user.mention}", embed=embed)
 
@@ -190,14 +186,14 @@ class PersonnalNotifications(commands.Cog):
                     embed = Embed(
                         title="Notification métier : quête journalière",
                         description=("Salut,\n\n"
-                                     "Il est 10:00 !\n"
-                                     "J'espère que ça va 😄\n\n"
-                                     "Si ce n'est pas fait, pense bien à : \n"
-                                     "- faire ta quête journalière de métier\n"
-                                     "-> /jobs\n\n"
-                                     "Une fois ta quête journalière terminée,"
-                                     "**réagis avec l'emoji prédéfini !**"
-                                     "Bon jeu 😘"),
+                                    "Il est 10:00 !\n"
+                                    "J'espère que ça va 😄\n\n"
+                                    "Si ce n'est pas fait, pense bien à : \n"
+                                    "- faire ta quête journalière de métier\n"
+                                    "-> /jobs\n\n"
+                                    "Une fois ta quête journalière terminée,"
+                                    "**réagis avec l'emoji prédéfini !**"
+                                    "Bon jeu 😘"),
                         color=0x00ff00)
                     message = await user.send(f"{user.mention}", embed=embed)
                     await message.add_reaction("✅")
@@ -208,14 +204,14 @@ class PersonnalNotifications(commands.Cog):
                     embed = Embed(
                         title="Notification métier : quête journalière",
                         description=("Salut,\n\n"
-                                     "Il est 15:00 !\n"
-                                     "J'espère que ça va 😄\n\n"
-                                     "Si ce n'est pas fait, pense bien à : \n"
-                                     "- faire ta quête journalière de métier\n"
-                                     "-> /jobs\n\n"
-                                     "Une fois ta quête journalière terminée,"
-                                     "**réagis avec l'emoji prédéfini !**"
-                                     "Bon jeu 😘"),
+                                    "Il est 15:00 !\n"
+                                    "J'espère que ça va 😄\n\n"
+                                    "Si ce n'est pas fait, pense bien à : \n"
+                                    "- faire ta quête journalière de métier\n"
+                                    "-> /jobs\n\n"
+                                    "Une fois ta quête journalière terminée,"
+                                    "**réagis avec l'emoji prédéfini !**"
+                                    "Bon jeu 😘"),
                         color=0x00ff00)
                     message = await user.send(f"{user.mention}", embed=embed)
                     await message.add_reaction("✅")
@@ -226,14 +222,14 @@ class PersonnalNotifications(commands.Cog):
                     embed = Embed(
                         title="Notification métier : quête journalière",
                         description=("Salut,\n\n"
-                                     "Il est 20:00 !\n"
-                                     "J'espère que ça va 😄\n\n"
-                                     "Si ce n'est pas fait, pense bien à : \n"
-                                     "- faire ta quête journalière de métier\n"
-                                     "-> /jobs\n\n"
-                                     "Une fois ta quête journalière terminée,"
-                                     "**réagis avec l'emoji prédéfini !**"
-                                     "Bon jeu 😘"),
+                                    "Il est 20:00 !\n"
+                                    "J'espère que ça va 😄\n\n"
+                                    "Si ce n'est pas fait, pense bien à : \n"
+                                    "- faire ta quête journalière de métier\n"
+                                    "-> /jobs\n\n"
+                                    "Une fois ta quête journalière terminée,"
+                                    "**réagis avec l'emoji prédéfini !**"
+                                    "Bon jeu 😘"),
                         color=0x00ff00)
                     message = await user.send(f"{user.mention}", embed=embed)
                     await message.add_reaction("✅")
