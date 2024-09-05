@@ -8,6 +8,8 @@ from database import add_user, user_exists, remove_user, get_all_users, update_q
 
 from blocaria import methods_vote
 
+import test
+
 tz = pytz.timezone('Europe/Paris')
 
 
@@ -61,19 +63,20 @@ class Leave(commands.Cog):
 
 # Send the first personnal notification
 async def send_first_personnal_notifications(user):
-    embed = Embed(
-        title="Première notification personnelle",
-        description=("Salut,\n\n"
-                    "Tu viens d'activer tes notifications personnelles !\n"
-                    "Bonne session de jeu ! 😄\n\n"
-                    "Aujourd'hui, pense bien à : \n"
-                    "- Tes pets -> /pets\n"
-                    "- Tes 2 votes -> /vote\n"
-                    "- Tes récompenses -> /rewards\n"
-                    "- Ton vip -> /vip\n"
-                    "- Ta quête journalière -> /jobs\n\n"
-                    "Bonne session 😘"),
-        color=0x00ff00)
+    embed = await test.get_embed("first personnal notification")
+    # embed = Embed(
+    #     title="Première notification personnelle",
+    #     description=("Salut,\n\n"
+    #                 "Tu viens d'activer tes notifications personnelles !\n"
+    #                 "Bonne session de jeu ! 😄\n\n"
+    #                 "Aujourd'hui, pense bien à : \n"
+    #                 "- Tes pets -> /pets\n"
+    #                 "- Tes 2 votes -> /vote\n"
+    #                 "- Tes récompenses -> /rewards\n"
+    #                 "- Ton vip -> /vip\n"
+    #                 "- Ta quête journalière -> /jobs\n\n"
+    #                 "Bonne session 😘"),
+    #     color=0x00ff00)
     await user.send(f"{user.mention}", embed=embed)
 
 

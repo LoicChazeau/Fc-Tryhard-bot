@@ -1,0 +1,18 @@
+{
+    "first_personnal_notification": {
+        "title": "Première notification personnelle",
+        "description": [
+            "Salut,\n\n",
+            "Tu viens d'activer tes notifications personnelles !\n",
+            "Bonne session de jeu ! 😄\n\n",
+            "Aujourd'hui, pense bien à : \n",
+            "- Tes pets -> /pets\n",
+            "- Tes 2 votes -> /vote\n",
+            "- Tes récompenses -> /rewards\n",
+            "- Ton vip -> /vip\n",
+            "- Ta quête journalière -> /jobs\n\n",
+            "Bonne session 😘"
+        ],
+        "color": "0x00ff00"
+    }
+}
