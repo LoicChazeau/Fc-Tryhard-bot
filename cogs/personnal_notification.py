@@ -4,13 +4,9 @@ import discord
 import pytz
 from discord import Embed, app_commands
 from discord.ext import commands, tasks
-from replit import db
+from database import add_user, user_exists, remove_user, get_all_users, update_quest_status, update_vote_status, update_pets_status
 
 from blocaria import methods_vote
-
-if "onlines" not in db:
-    db["onlines"] = {}
-# db["onlines"] = {}
 
 tz = pytz.timezone('Europe/Paris')
 
@@ -26,7 +22,7 @@ class Join(commands.Cog):
         description="Indicates that the player has joined the server")
     async def join(self, interaction: discord.Interaction, pseudo: str):
         if pseudo is not None:
-            if f"{interaction.user.id}" in db["onlines"]:
+            if user_exists(interaction.user.id):
                 await interaction.response.send_message(
                     "⚠️ - **Vous avez déjà lancé vos notifications personnelles !** ❌",
                     delete_after=5,
@@ -36,9 +32,7 @@ class Join(commands.Cog):
                     "🥳 - **Super ! Vous avez lancé vos notifications personnelles !** ✅",
                     delete_after=5,
                     ephemeral=True)
-                db["onlines"][f"{interaction.user.id}"] = (
-                    pseudo, datetime.now(tz).isoformat(), False, False, None,
-                    False)
+                add_user(str(interaction.user.id), None, False)
                 await send_first_personnal_notifications(interaction.user)
         else:
             await interaction.response.send_message(
@@ -57,12 +51,12 @@ class Leave(commands.Cog):
         name="leave",
         description="Indicates that the player has leaved the server")
     async def leave(self, interaction: discord.Interaction):
-        if f"{interaction.user.id}" in db["onlines"]:
+        if user_exists(interaction.user.id):
             await interaction.response.send_message(
                 "🥳 - **Super ! Vous avez stoppé vos notifications personnelles !** ✅",
                 delete_after=5,
                 ephemeral=True)
-            db["onlines"].pop(f"{interaction.user.id}")
+            remove_user(interaction.user.id)
         else:
             await interaction.response.send_message(
                 "⚠️ - **Vous n'avez pas lancé vos notifications personnelles !** ❌",
@@ -103,17 +97,19 @@ class PersonnalNotifications(commands.Cog):
     @tasks.loop(minutes=30)
     async def reset_votes_timers(self):
         await self.bot.wait_until_ready()
-        if len(db["onlines"]) > 0:
-            for key in db["onlines"].items():
-                db["onlines"][key][2] = False
-                db["onlines"][key][3] = False
+        onlines = get_all_users()  # Récupérer tous les utilisateurs de la base
+        for user_id, user_data in onlines.items():
+            update_vote_status(user_id, {"vote1_completed": False, "vote2_completed": False})  # Remettre le statut des votes à False
 
     @tasks.loop(minutes=1)  # Vérifie toutes les minutes
     async def personnal_notifications(self):
         await self.bot.wait_until_ready()
 
-        if len(db["onlines"]) > 0:
-            for key, value in db["onlines"].items():
+        # Obtenir tous les utilisateurs de la base de données
+        onlines = get_all_users()
+
+        if len(onlines) > 0:
+            for key, value in onlines.items():
                 now = datetime.now(tz)
                 user = await self.bot.fetch_user(int(key))
 
@@ -128,7 +124,7 @@ class PersonnalNotifications(commands.Cog):
                                      "À plus ! 😘"),
                         color=0x00ff00)
                     await user.send(f"{user.mention}", embed=embed)
-                    db["onlines"][key][1] = now.isoformat()
+                    update_pets_status(key, now.isoformat())  # Met à jour l'heure du dernier rappel des pets
 
                 # VOTES
                 pseudo = value[0]
@@ -139,8 +135,8 @@ class PersonnalNotifications(commands.Cog):
                 for keys in available_vote_data:
                     if keys['id'] == "serveur-prive":
                         if keys['available'] is True:
-                            if value[2] is False:
-                                db["onlines"][key][2] = True
+                            if not value['vote1_completed']:
+                                update_vote_status(key, {"vote1_completed": True})
                                 embed = Embed(
                                     title="Rappel du vote #1",
                                     description=(
@@ -153,11 +149,11 @@ class PersonnalNotifications(commands.Cog):
                                     f"{user.mention}, [vote en cliquant ici](https://blocaria.fr/vote)",
                                     embed=embed)
                         else:
-                            db["onlines"][key][2] = False
+                            update_vote_status(key, {"vote1_completed": False})
                     if keys['id'] == "serveurminecraft":
                         if keys['available'] is True:
-                            if value[3] is False:
-                                db["onlines"][key][3] = True
+                            if not value['vote2_completed']:
+                                update_vote_status(key, {"vote2_completed": True})
                                 embed = Embed(
                                     title="Rappel du vote #2",
                                     description=(
@@ -170,7 +166,7 @@ class PersonnalNotifications(commands.Cog):
                                     f"{user.mention}, [vote en cliquant ici](https://blocaria.fr/vote)",
                                     embed=embed)
                         else:
-                            db["onlines"][key][3] = False
+                            update_vote_status(key, {"vote2_completed": False})
 
                 # VIP & REWARDS NOTIFICATION
                 if now.hour == 23 and now.minute == 00:
@@ -205,12 +201,9 @@ class PersonnalNotifications(commands.Cog):
                         color=0x00ff00)
                     message = await user.send(f"{user.mention}", embed=embed)
                     await message.add_reaction("✅")
-                    db["onlines"][key][4] = f"{message.id}"
-                    if db["onlines"][key][5]:
-                        db["onlines"][key][5] = False
+                    update_quest_status(user_id, {"registered_id": message.id, "quest_completed": False})
 
-                if now.hour == 15 and now.minute == 00 and not db["onlines"][
-                        key][5]:
+                if now.hour == 15 and now.minute == 00 and value['quest_completed']:
                     print("[JOBS QUEST NOTIFICATION] Jobs quest notif")
                     embed = Embed(
                         title="Notification métier : quête journalière",
@@ -226,10 +219,9 @@ class PersonnalNotifications(commands.Cog):
                         color=0x00ff00)
                     message = await user.send(f"{user.mention}", embed=embed)
                     await message.add_reaction("✅")
-                    db["onlines"][key][4] = f"{message.id}"
+                    update_quest_status(user_id, {"registered_id": message.id, "quest_completed": False})
 
-                if now.hour == 20 and now.minute == 00 and not db["onlines"][
-                        key][5]:
+                if now.hour == 20 and now.minute == 00 and not value['quest_completed']:
                     print("[JOBS QUEST NOTIFICATION] Jobs quest notif")
                     embed = Embed(
                         title="Notification métier : quête journalière",
@@ -245,7 +237,8 @@ class PersonnalNotifications(commands.Cog):
                         color=0x00ff00)
                     message = await user.send(f"{user.mention}", embed=embed)
                     await message.add_reaction("✅")
-                    db["onlines"][key][4] = f"{message.id}"
+                    update_quest_status(user_id, {"registered_id": message.id, "quest_completed": False})
+
 
 
 async def setup(bot):

@@ -6,7 +6,9 @@ import discord
 import requests
 from discord.ext import commands
 from flask import Flask, render_template
-from replit import db
+
+import sqlite3
+from database import get_user, update_quest_status, get_all_users, init_db
 
 from config import COMMAND_PREFIX, TOKEN, UPTIME_API_KEY
 from utils import load_cogs
@@ -21,7 +23,6 @@ uptime_url = "https://api.uptimerobot.com/v2/getMonitors"
 # Spécifiez le dossier où Flask doit chercher les templates
 app = Flask(__name__,
             template_folder=os.path.dirname(os.path.abspath(__file__)))
-
 
 @app.route('/')
 def home():
@@ -59,10 +60,7 @@ def home():
     bot_info = {
         "bot_name": bot.user.name if bot.user else "Bot",
         "guild_count": len(bot.guilds) if bot.user else 0,
-        "database_content": {
-            key: db[key]
-            for key in db.keys()
-        },
+        "database_content": get_all_users(),
         "available_vote_data": available_vote_data
     }
     return render_template("index.html", **bot_info, monitors=monitors)
@@ -102,28 +100,44 @@ async def on_ready():
 async def on_raw_reaction_add(payload):
     channel = bot.get_channel(payload.channel_id)
     emoji = payload.emoji
+    user_id = str(payload.user_id)
 
-    message_id = str(payload.message_id)
-    registered_id = db["onlines"][str(payload.user_id)][4]
+    # Récupérer les informations de l'utilisateur à partir de la base de données SQLite
+    user_data = get_user(user_id)
 
+    # Si l'utilisateur n'est pas trouvé dans la base de données, arrêter l'exécution
+    if user_data is None:
+        print(f"User {user_id} not found in the database.")
+        return
+
+    registered_id = user_data['registered_id']  # ID du message associé à l'utilisateur
+    quest_completed = user_data['quest_completed']  # Statut de la quête
+
+    # Vérifiez si le channel est un message privé
     if not isinstance(channel, discord.DMChannel):
         return
 
-    if message_id != registered_id:
-        print("2")
+    # Vérifier que le message correspond
+    if str(payload.message_id) != registered_id:
+        print("Message ID does not match.")
         return
 
+    # Vérifier que l'emoji est "✅"
     if emoji.name != "✅":
         return
 
-    if db["onlines"][str(payload.user_id)][5]:
+    # Si l'utilisateur a déjà complété la quête
+    if quest_completed:
         await channel.send(
             "⚠️ - **Tu as déjà réalisé ta quête journalière. Reviens demain !** ❌"
         )
     else:
-        db["onlines"][str(payload.user_id)][5] = True
+        # Mettre à jour le statut de la quête dans la base de données
+        update_quest_status(user_id, True)
+
         await channel.send(
-            "🥳 - **Super ! Je reviendrai demain pour te prévenir !** ✅")
+            "🥳 - **Super ! Je reviendrai demain pour te prévenir !** ✅"
+        )
 
 
 async def main():
@@ -135,6 +149,9 @@ async def main():
 
 
 if __name__ == "__main__":
+    # Initialiser la base de données SQLite
+    init_db()
+
     # Démarrer le serveur Flask pour garder le bot en vie
     keep_alive()
 

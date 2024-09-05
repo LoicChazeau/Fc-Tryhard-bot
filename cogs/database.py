@@ -1,9 +1,8 @@
 import asyncio
-
 import discord
 from discord import Embed, app_commands
 from discord.ext import commands
-from replit import db
+from database import get_all_users  # Importez la fonction pour récupérer les utilisateurs
 from datetime import datetime, timedelta
 
 admin = 1280234769573216389
@@ -23,12 +22,24 @@ class Database(commands.Cog):
         member = await guild.fetch_member(interaction.user.id)
         assert member is not None
 
+        # Vérifiez si l'utilisateur a le rôle d'admin
         if guild.get_role(admin) in member.roles:
 
-            desc = ""
-            for item in db.items():
-                desc += f"{item}\n"
+            # Récupérer toutes les données des utilisateurs depuis la base de données
+            all_users = get_all_users()
 
+            # Créer une description pour chaque utilisateur
+            desc = ""
+            for user_id, user_data in all_users.items():
+                desc += f"User ID: {user_id}\n"
+                desc += f"Registered ID: {user_data['registered_id']}\n"
+                desc += f"Quest Completed: {user_data['quest_completed']}\n"
+                desc += f"Vote1 Completed: {user_data.get('vote1_completed', False)}\n"
+                desc += f"Vote2 Completed: {user_data.get('vote2_completed', False)}\n"
+                desc += f"Last Pets Time: {user_data.get('last_pets_time', 'N/A')}\n"
+                desc += "\n"
+
+            # Créer un embed pour afficher les données
             embed = Embed(title="DATABASE",
                           description=(f"{desc}"),
                           color=0x00ff00)
