@@ -1,9 +1,13 @@
 # config.py
 
 import os
+from dotenv import load_dotenv
 
-discord_token = os.environ['DISCORD_TOKEN']
-uptime_api_key = os.environ['UPTIME_API_KEY']
+# Charger le fichier .env
+load_dotenv()
+
+discord_token = os.getenv['DISCORD_TOKEN']
+uptime_api_key = os.getenv['UPTIME_API_KEY']
 
 # Le token d'authentification de votre bot
 TOKEN = discord_token
