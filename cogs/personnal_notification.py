@@ -8,7 +8,6 @@ from database import add_user, user_exists, remove_user, get_all_users, update_q
 
 from blocaria import methods_vote
 
-import test
 
 tz = pytz.timezone('Europe/Paris')
 
@@ -60,10 +59,10 @@ class Leave(commands.Cog):
                 delete_after=5,
                 ephemeral=True)
 
-
 # Send the first personnal notification
 async def send_first_personnal_notifications(user):
-    embed = await test.get_embed("first personnal notification")
+    embed_manager = user.bot.get_cog('EmbedManager')
+    embed = await embed_manager.get_embed("first personnal notification")
     # embed = Embed(
     #     title="Première notification personnelle",
     #     description=("Salut,\n\n"
