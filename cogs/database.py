@@ -2,7 +2,7 @@ import asyncio
 import discord
 from discord import Embed, app_commands
 from discord.ext import commands
-from database import get_all_users  # Importez la fonction pour récupérer les utilisateurs
+from database import get_all_users, get_all_users_db  # Importez la fonction pour récupérer les utilisateurs
 from datetime import datetime, timedelta
 
 admin = 1280234769573216389
@@ -26,12 +26,13 @@ class Database(commands.Cog):
         if guild.get_role(admin) in member.roles:
 
             # Récupérer toutes les données des utilisateurs depuis la base de données
-            all_users = get_all_users()
+            all_users = get_all_users_db()
 
             # Créer une description pour chaque utilisateur
             desc = ""
             for user_id, user_data in all_users.items():
                 desc += f"User ID: {user_id}\n"
+                desc += f"Pseudo: {user_data['pseudo']}\n"
                 desc += f"Registered ID: {user_data['registered_id']}\n"
                 desc += f"Quest Completed: {user_data['quest_completed']}\n"
                 desc += f"Vote1 Completed: {user_data.get('vote1_completed', False)}\n"

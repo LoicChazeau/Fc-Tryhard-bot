@@ -1,0 +1,79 @@
+{
+    "blocaria": {
+        "first_personnal_notification": {
+            "title": "Première notification personnelle",
+            "description": [
+                "Salut,\n\n",
+                "Tu viens d'activer tes notifications personnelles !\n",
+                "Bonne session de jeu ! 😄\n\n",
+                "Aujourd'hui, pense bien à : \n",
+                ":small_orange_diamond: Tes pets ⤵ ```/pets```\n",
+                ":small_orange_diamond: Tes 2 votes ⤵ ```/vote```\n",
+                ":small_orange_diamond: Tes récompenses ⤵ ```/rewards```\n",
+                ":small_orange_diamond: Ton vip ⤵ ```/vip```\n",
+                ":small_orange_diamond: Ta quête journalière ⤵ ```/jobs```\n\n",
+                "Bonne session 😘"
+            ],
+            "color": "0x00ff00"
+        },
+        "pets": {
+            "title": "Rappel des pets",
+            "description": [
+                "Salut,\n\n",
+                "C'est l'heure d'aller check tes pets !\n",
+                "J'espère qu'ils sont pleins 😄\n",
+                "```/pets```\n\n",
+                "À plus ! 😘"
+            ],
+            "color": "0x00ff00"
+        },
+        "vote1": {
+            "title": "Rappel du vote #1",
+            "description": [
+                "Salut,\n\n",
+                "C'est l'heure d'aller voter !\n",
+                "N'oublie pas le vote #1 😄\n",
+                "```/vote```\n\n",
+                "À plus ! 😘"
+            ],
+            "color": "0x00ff00"
+        },
+        "vote2": {
+            "title": "Rappel du vote #2",
+            "description": [
+                "Salut,\n\n",
+                "C'est l'heure d'aller voter !\n",
+                "N'oublie pas le vote #2 😄\n",
+                "```/vote```\n\n",
+                "À plus ! 😘"
+            ],
+            "color": "0x00ff00"
+        },
+        "vip_rewards": {
+            "title": "Notification vip & rewards 23:00",
+            "description": [
+                "Salut,\n\n",
+                "Il est 23:00 ! (et oui déjà...)\n",
+                "Bientôt la fin de journée 😄\n\n",
+                "Donc pense bien à : \n",
+                ":small_orange_diamond: Tes récompenses ⤵ ```/rewards```\n",
+                ":small_orange_diamond: Ton vip ⤵ ```/vip```\n\n",
+                "Bonne soirée 😘"
+            ],
+            "color": "0x00ff00"
+        },
+        "jobs_quest": {
+            "title": "Notification métier : quête journalière",
+            "description": [
+                "Salut,\n\n",
+                "J'espère que ça va 😄\n\n",
+                "Si ce n'est pas fait, pense bien à : \n",
+                ":small_orange_diamond: Faire ta quête journalière ⤵ ```/jobs```\n",
+                "Une fois ta quête journalière terminée,",
+                "**réagis avec l'emoji prédéfini !**",
+                "Bon jeu 😘"
+            ],
+            "color": "0x00ff00"
+        }
+    }
+}

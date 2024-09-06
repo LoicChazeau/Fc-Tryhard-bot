@@ -2,12 +2,20 @@ from datetime import datetime, timedelta
 
 import discord
 import pytz
-from discord import Embed, app_commands
+from discord import app_commands
 from discord.ext import commands, tasks
-from database import add_user, user_exists, remove_user, get_all_users, update_quest_status, update_vote_status, update_pets_status
 
 from blocaria import methods_vote
-
+from database import (
+    add_user_db,
+    get_all_users_db,
+    get_user_db,
+    init_db,
+    remove_user_db,
+    update_user_db,
+    user_exists_db,
+)
+from scripts_utils import embed_manager
 
 tz = pytz.timezone('Europe/Paris')
 
@@ -23,18 +31,18 @@ class Join(commands.Cog):
         description="Indicates that the player has joined the server")
     async def join(self, interaction: discord.Interaction, pseudo: str):
         if pseudo is not None:
-            if user_exists(interaction.user.id):
+            if user_exists_db(interaction.user.id):
                 await interaction.response.send_message(
                     "⚠️ - **Vous avez déjà lancé vos notifications personnelles !** ❌",
                     delete_after=5,
                     ephemeral=True)
             else:
-                await interaction.response.send_message(
-                    "🥳 - **Super ! Vous avez lancé vos notifications personnelles !** ✅",
-                    delete_after=5,
-                    ephemeral=True)
-                add_user(str(interaction.user.id), None, False)
-                await send_first_personnal_notifications(interaction.user)
+                if add_user_db(interaction.user.id, pseudo):
+                    await interaction.response.send_message(
+                        "🥳 - **Super ! Vous avez lancé vos notifications personnelles !** ✅",
+                        delete_after=5,
+                        ephemeral=True)
+                    await send_first_personnal_notifications(interaction.user)
 
 
 # COMMAND '/leave' : Indicates that the player has leaved the server
@@ -47,35 +55,23 @@ class Leave(commands.Cog):
         name="leave",
         description="Indicates that the player has leaved the server")
     async def leave(self, interaction: discord.Interaction):
-        if user_exists(interaction.user.id):
-            await interaction.response.send_message(
-                "🥳 - **Super ! Vous avez stoppé vos notifications personnelles !** ✅",
-                delete_after=5,
-                ephemeral=True)
-            remove_user(interaction.user.id)
+        if user_exists_db(interaction.user.id):
+            if remove_user_db(interaction.user.id):
+                await interaction.response.send_message(
+                    "🥳 - **Super ! Vous avez stoppé vos notifications personnelles !** ✅",
+                    delete_after=5,
+                    ephemeral=True)
         else:
             await interaction.response.send_message(
                 "⚠️ - **Vous n'avez pas lancé vos notifications personnelles !** ❌",
                 delete_after=5,
                 ephemeral=True)
 
+
 # Send the first personnal notification
 async def send_first_personnal_notifications(user):
-    embed_manager = user.bot.get_cog('EmbedManager')
-    embed = await embed_manager.get_embed("first personnal notification")
-    # embed = Embed(
-    #     title="Première notification personnelle",
-    #     description=("Salut,\n\n"
-    #                 "Tu viens d'activer tes notifications personnelles !\n"
-    #                 "Bonne session de jeu ! 😄\n\n"
-    #                 "Aujourd'hui, pense bien à : \n"
-    #                 "- Tes pets -> /pets\n"
-    #                 "- Tes 2 votes -> /vote\n"
-    #                 "- Tes récompenses -> /rewards\n"
-    #                 "- Ton vip -> /vip\n"
-    #                 "- Ta quête journalière -> /jobs\n\n"
-    #                 "Bonne session 😘"),
-    #     color=0x00ff00)
+    embed = await embed_manager.get_embed("blocaria",
+                                          "first_personnal_notification")
     await user.send(f"{user.mention}", embed=embed)
 
 
@@ -94,16 +90,19 @@ class PersonnalNotifications(commands.Cog):
     @tasks.loop(minutes=30)
     async def reset_votes_timers(self):
         await self.bot.wait_until_ready()
-        onlines = get_all_users()  # Récupérer tous les utilisateurs de la base
-        for user_id, user_data in onlines.items():
-            update_vote_status(user_id, {"vote1_completed": False, "vote2_completed": False})  # Remettre le statut des votes à False
+        onlines = get_all_users_db()
+        for user_id in onlines:
+            update_user_db(user_id, {
+                "vote1_completed": False,
+                "vote2_completed": False
+            })
 
     @tasks.loop(minutes=1)  # Vérifie toutes les minutes
     async def personnal_notifications(self):
         await self.bot.wait_until_ready()
 
         # Obtenir tous les utilisateurs de la base de données
-        onlines = get_all_users()
+        onlines = get_all_users_db()
 
         if len(onlines) > 0:
             for key, value in onlines.items():
@@ -112,131 +111,79 @@ class PersonnalNotifications(commands.Cog):
                 user_id = user.id
 
                 # 3h00 : PETS
-                elapsed = now - datetime.fromisoformat(value[1])
+                elapsed = now - datetime.fromisoformat(value["last_pets_time"])
                 if elapsed >= timedelta(hours=3):
-                    embed = Embed(
-                        title="Rappel des pets",
-                        description=("Salut,\n\n"
-                                    "C'est l'heure d'aller check tes pets !\n"
-                                    "J'espère qu'ils sont pleins 😄\n\n"
-                                    "À plus ! 😘"),
-                        color=0x00ff00)
+                    embed = await embed_manager.get_embed("blocaria", "pets")
                     await user.send(f"{user.mention}", embed=embed)
-                    update_pets_status(key, now.isoformat())  # Met à jour l'heure du dernier rappel des pets
+                    update_user_db(key, {"last_pets_time": now.isoformat()})
 
                 # VOTES
-                pseudo = value[0]
-
+                pseudo = value["pseudo"]
                 available_vote_data = methods_vote.get_roles_status(pseudo)
-                # print(f"\nPSEUDO = {pseudo}\n{available_vote_data}\n")
 
                 for keys in available_vote_data:
                     if keys['id'] == "serveur-prive":
                         if keys['available'] is True:
                             if not value['vote1_completed']:
-                                update_vote_status(key, {"vote1_completed": True})
-                                embed = Embed(
-                                    title="Rappel du vote #1",
-                                    description=(
-                                        "Salut,\n\n"
-                                        "C'est l'heure d'aller voter !\n"
-                                        "N'oublie pas le vote #1 😄\n\n"
-                                        "À plus ! 😘"),
-                                    color=0x00ff00)
+                                update_user_db(key, {"vote1_completed": True})
+                                embed = await embed_manager.get_embed(
+                                    "blocaria", "vote1")
                                 await user.send(
                                     f"{user.mention}, [vote en cliquant ici](https://blocaria.fr/vote)",
                                     embed=embed)
                         else:
-                            update_vote_status(key, {"vote1_completed": False})
+                            if value['vote1_completed'] is not False:
+                                update_user_db(key, {"vote1_completed": False})
                     if keys['id'] == "serveurminecraft":
                         if keys['available'] is True:
                             if not value['vote2_completed']:
-                                update_vote_status(key, {"vote2_completed": True})
-                                embed = Embed(
-                                    title="Rappel du vote #2",
-                                    description=(
-                                        "Salut,\n\n"
-                                        "C'est l'heure d'aller voter !\n"
-                                        "N'oublie pas le vote #2 😄\n\n"
-                                        "À plus ! 😘"),
-                                    color=0x00ff00)
+                                update_user_db(key, {"vote2_completed": True})
+                                embed = await embed_manager.get_embed(
+                                    "blocaria", "vote2")
                                 await user.send(
                                     f"{user.mention}, [vote en cliquant ici](https://blocaria.fr/vote)",
                                     embed=embed)
                         else:
-                            update_vote_status(key, {"vote2_completed": False})
+                            if value['vote2_completed'] is not False:
+                                update_user_db(key, {"vote2_completed": False})
 
                 # VIP & REWARDS NOTIFICATION
                 if now.hour == 23 and now.minute == 00:
 
                     print("[VIP & REWARDS NOTIFICATION] Vip & Rewards notif")
-                    embed = Embed(
-                        title="Notification vip & rewards 23:00",
-                        description=("Salut,\n\n"
-                                    "Il est 23:00 ! (et oui déjà...)\n"
-                                    "Bientôt la fin de journée 😄\n\n"
-                                    "Donc pense bien à : \n"
-                                    "- Tes récompenses -> /rewards\n"
-                                    "- Ton vip -> /vip\n\n"
-                                    "Bonne soirée 😘"),
-                        color=0x00ff00)
+                    embed = await embed_manager.get_embed(
+                        "blocaria", "vip_rewards")
                     await user.send(f"{user.mention}", embed=embed)
 
                 # JOBS QUEST NOTIFICATION
                 if now.hour == 10 and now.minute == 00:
                     print("[JOBS QUEST NOTIFICATION] Jobs quest notif")
-                    embed = Embed(
-                        title="Notification métier : quête journalière",
-                        description=("Salut,\n\n"
-                                    "Il est 10:00 !\n"
-                                    "J'espère que ça va 😄\n\n"
-                                    "Si ce n'est pas fait, pense bien à : \n"
-                                    "- faire ta quête journalière de métier\n"
-                                    "-> /jobs\n\n"
-                                    "Une fois ta quête journalière terminée,"
-                                    "**réagis avec l'emoji prédéfini !**"
-                                    "Bon jeu 😘"),
-                        color=0x00ff00)
+                    embed = await embed_manager.get_embed(
+                        "blocaria", "jobs_quest")
                     message = await user.send(f"{user.mention}", embed=embed)
                     await message.add_reaction("✅")
-                    update_quest_status(user_id, {"registered_id": message.id, "quest_completed": False})
+                    update_user_db(user_id, {
+                        "registered_id": message.id,
+                        "quest_completed": False
+                    })
 
-                if now.hour == 15 and now.minute == 00 and value['quest_completed']:
+                if now.hour == 15 and now.minute == 00 and value[
+                        'quest_completed']:
                     print("[JOBS QUEST NOTIFICATION] Jobs quest notif")
-                    embed = Embed(
-                        title="Notification métier : quête journalière",
-                        description=("Salut,\n\n"
-                                    "Il est 15:00 !\n"
-                                    "J'espère que ça va 😄\n\n"
-                                    "Si ce n'est pas fait, pense bien à : \n"
-                                    "- faire ta quête journalière de métier\n"
-                                    "-> /jobs\n\n"
-                                    "Une fois ta quête journalière terminée,"
-                                    "**réagis avec l'emoji prédéfini !**"
-                                    "Bon jeu 😘"),
-                        color=0x00ff00)
+                    embed = await embed_manager.get_embed(
+                        "blocaria", "jobs_quest")
                     message = await user.send(f"{user.mention}", embed=embed)
                     await message.add_reaction("✅")
-                    update_quest_status(user_id, {"registered_id": message.id, "quest_completed": False})
+                    update_user_db(user_id, {"registered_id": message.id})
 
-                if now.hour == 20 and now.minute == 00 and not value['quest_completed']:
+                if now.hour == 20 and now.minute == 00 and not value[
+                        'quest_completed']:
                     print("[JOBS QUEST NOTIFICATION] Jobs quest notif")
-                    embed = Embed(
-                        title="Notification métier : quête journalière",
-                        description=("Salut,\n\n"
-                                    "Il est 20:00 !\n"
-                                    "J'espère que ça va 😄\n\n"
-                                    "Si ce n'est pas fait, pense bien à : \n"
-                                    "- faire ta quête journalière de métier\n"
-                                    "-> /jobs\n\n"
-                                    "Une fois ta quête journalière terminée,"
-                                    "**réagis avec l'emoji prédéfini !**"
-                                    "Bon jeu 😘"),
-                        color=0x00ff00)
+                    embed = await embed_manager.get_embed(
+                        "blocaria", "jobs_quest")
                     message = await user.send(f"{user.mention}", embed=embed)
                     await message.add_reaction("✅")
-                    update_quest_status(user_id, {"registered_id": message.id, "quest_completed": False})
-
+                    update_user_db(user_id, {"registered_id": message.id})
 
 
 async def setup(bot):

@@ -1,5 +1,6 @@
 import asyncio
 import os
+import sqlite3
 from threading import Thread
 
 import discord
@@ -7,10 +8,8 @@ import requests
 from discord.ext import commands
 from flask import Flask, render_template
 
-import sqlite3
-from database import get_user, update_quest_status, get_all_users, init_db
-
 from config import COMMAND_PREFIX, TOKEN, UPTIME_API_KEY
+from database import get_all_users, get_user, init_db, update_quest_status
 from utils import load_cogs
 
 app = Flask('')
