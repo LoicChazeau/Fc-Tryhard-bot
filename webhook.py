@@ -10,10 +10,13 @@ def git_update():
         # Aller dans le dossier du projet et faire un git pull
         os.system("cd /home/ec2-user/Fc-Tryhard-bot && git pull")
 
-        # Relancer le bot
+        # Installer les nouvelles dépendances
+        os.system("pip install -r /home/ec2-user/Fc-Tryhard-bot/requirements.txt")
+
+        # Redémarrer le bot (facultatif, si nécessaire)
         restart_bot()
         
-        return 'Update successful', 200
+        return 'Update and dependencies installation successful', 200
     else:
         return 'Invalid request', 400
 
