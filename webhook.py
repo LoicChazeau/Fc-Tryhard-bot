@@ -13,7 +13,7 @@ def git_update():
         # Installer les nouvelles dépendances
         os.system("pip install -r /home/ec2-user/Fc-Tryhard-bot/requirements.txt")
 
-        # Redémarrer le bot (facultatif, si nécessaire)
+        # Démarrer ou redémarrer le bot
         restart_bot()
         
         return 'Update and dependencies installation successful', 200
@@ -21,9 +21,13 @@ def git_update():
         return 'Invalid request', 400
 
 def restart_bot():
-    # Arrêter le bot s'il est en cours d'exécution
-    os.system("pkill -f main.py")  # Arrête le processus Python en fonction du nom du fichier
-    
+    # Vérifier si le bot est déjà en cours d'exécution
+    bot_running = os.system("pgrep -f main.py") == 0
+
+    if bot_running:
+        # Si le bot est en cours d'exécution, le redémarrer
+        os.system("pkill -f main.py")
+
     # Lancer le bot dans un nouvel écran (screen session)
     os.system("screen -dmS bot_screen python3 /home/ec2-user/Fc-Tryhard-bot/main.py")
 
