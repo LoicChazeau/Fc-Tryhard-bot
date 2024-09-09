@@ -5,7 +5,7 @@ from discord.ext import commands
 from database import get_all_users, get_all_users_db  # Importez la fonction pour récupérer les utilisateurs
 from datetime import datetime, timedelta
 
-admin = 1280234769573216389
+admin = 866688547078668308
 
 
 # Database admin commande
