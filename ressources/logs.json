@@ -1,0 +1,9 @@
+{
+  "test": {
+    "type": "ERROR",
+    "content": [
+      "Une erreur est survenue lors de l'execution du logging.",
+      "L'erreur est useless ici."
+    ]
+  }
+}

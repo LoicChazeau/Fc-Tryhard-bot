@@ -16,4 +16,5 @@ TOKEN = discord_token
 UPTIME_API_KEY = uptime_api_key
 
 # Préfixe pour les commandes du bot
-COMMAND_PREFIX = '!'
+# COMMAND_PREFIX = '!'
+COMMAND_PREFIX = '='
