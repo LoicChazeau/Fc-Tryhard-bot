@@ -5,7 +5,7 @@ import pytz
 from discord import Embed
 from discord.ext import commands, tasks
 
-global_notification_channel_id = 1280189376256544861
+global_notification_channel_id = 1280142397988405349
 
 
 class GlobalNotifications(commands.Cog):
