@@ -1,0 +1,192 @@
+help
+[0:30:8] [FcTryHard/INFO]: -------------------- HELP --------------------
+[0:30:8] [FcTryHard/INFO]: ? 'help': send this help message
+[0:30:8] [FcTryHard/INFO]: ? 'refresh': refresh the console
+[0:30:8] [FcTryHard/INFO]: -------------------- HELP --------------------
+refresh
+[0:30:17] [FcTryHard/INFO]: Unknown command. Type 'help' for help.
+help
+[0:31:40] [FcTryHard/INFO]: -------------------- HELP --------------------
+[0:31:40] [FcTryHard/INFO]: ? 'help': send this help message
+[0:31:40] [FcTryHard/INFO]: -------------------- HELP --------------------
+help
+[0:32:21] [FcTryHard/INFO]: -------------------- HELP --------------------
+[0:32:21] [FcTryHard/INFO]: ? 'help': send this help message
+[0:32:21] [FcTryHard/INFO]: -------------------- HELP --------------------
+g
+[0:33:38] [FcTryHard/INFO]: Unknown command. Type 'help' for help.
+help
+[0:33:40] [FcTryHard/INFO]: -------------------- HELP --------------------
+[0:33:40] [FcTryHard/INFO]: ? 'help': send this help message
+[0:33:40] [FcTryHard/INFO]: -------------------- HELP --------------------
+test
+[0:48:9] [FcTryHard/INFO]: Unknown command. Type 'help' for help.
+example
+example
+example
+example
+example
+example
+example
+example
+example
+example
+example
+example
+example
+example
+example
+example
+example
+example
+[23:7:9] [FcTryHard/INFO]: La commande example_command n'a pas de méthode associée.
+example
+example
+[23:11:38] [FcTryHard/INFO]: La commande example_command n'a pas de méthode associée.
+[1:22:1] [FcTryHard/INFO]: La commande example_command n'a pas de méthode associée.
+[1:23:27] [FcTryHard/INFO]: La commande 'example' est en cours d'execution.
+ahah
+t
+[1:30:21] [FcTryHard/INFO]: Unknown command. Type 'help' for help.
+help
+[1:30:24] [FcTryHard/INFO]: -------------------- HELP --------------------
+[1:30:24] [FcTryHard/INFO]: ? 'help': send this help message
+[1:30:24] [FcTryHard/INFO]: -------------------- HELP --------------------
+example
+example
+help
+[1:30:32] [FcTryHard/INFO]: -------------------- HELP --------------------
+[1:30:32] [FcTryHard/INFO]: ? 'help': send this help message
+[1:30:32] [FcTryHard/INFO]: -------------------- HELP --------------------
+example
+[1:31:29] [FcTryHard/INFO]: Unknown command. Type 'help' for help.
+Help
+[1:31:31] [FcTryHard/INFO]: Unknown command. Type 'help' for help.
+help
+[1:31:33] [FcTryHard/INFO]: -------------------- HELP --------------------
+[1:31:33] [FcTryHard/INFO]: ? 'help': send this help message
+[1:31:33] [FcTryHard/INFO]: -------------------- HELP --------------------
+t
+[12:41:35] [FcTryHard/INFO]: Unknown command. Type 'help' for help.
+example
+example
+example
+example
+example
+example
+example
+example arg1 argument2 etundeplus
+test
+tetst
+[13:58:8] [FcTryHard/INFO]: Unknown command. Type 'help' for help.
+test
+test
+test y
+test ahah lol
+test
+test
+test arg
+ahah
+h
+lol
+test
+test eheh
+test
+test
+test
+lol
+lol
+[14:16:29] [FcTryHard/INFO]: Unknown command. Type 'help' for help.
+test
+lol
+[14:17:28] [FcTryHard/INFO]: Unknown command. Type 'help' for help.
+help
+[14:17:38] [FcTryHard/INFO]: Unknown command. Type 'help' for help.
+test
+help
+[14:22:47] [FcTryHard/INFO]: -------------------- HELP --------------------
+[14:22:47] [FcTryHard/INFO]: ? 'help': send this help message
+[14:22:47] [FcTryHard/INFO]: -------------------- HELP --------------------
+help
+[14:25:49] [FcTryHard/INFO]: -------------------- HELP --------------------
+[14:25:49] [FcTryHard/INFO]: ? 'help': send this help message
+[14:25:49] [FcTryHard/INFO]: -------------------- HELP --------------------
+ahah
+[14:26:35] [FcTryHard/INFO]: Unknown command. Type 'help' for help.
+ahah
+[14:27:17] [FcTryHard/INFO]: -------------------- AHAH --------------------
+[14:27:17] [FcTryHard/INFO]: ? 'help': send this help message
+[14:27:17] [FcTryHard/INFO]: -------------------- AHAH --------------------
+ahah
+[14:30:11] [FcTryHard/INFO]: -------------------- AHAH --------------------
+[14:30:11] [FcTryHard/INFO]: ? 'help': send this help message
+[14:30:11] [FcTryHard/INFO]: -------------------- AHAH --------------------
+ahah
+[10:16:52] [FcTryHard/INFO]: -------------------- AHAH --------------------
+[10:16:52] [FcTryHard/INFO]: ? CECI EST UN EXEMPLE
+[10:16:52] [FcTryHard/INFO]: -------------------- AHAH --------------------
+broadcast
+broadcast lol
+[12:7:29] [FcTryHard/INFO]: Message envoyé sur le salon 'général'
+broadcast
+[12:16:59] [FcTryHard/INFO]: Message '' envoyé sur le salon 'général'
+broadcast
+[12:17:48] [FcTryHard/INFO]: Incomplete command. See below for error
+[12:17:48] [FcTryHard/INFO]: broadcast <message>
+broadcast
+[12:17:57] [FcTryHard/INFO]: Incomplete command. See below for error
+[12:17:57] [FcTryHard/INFO]: broadcast <message>
+broadcast
+[12:20:41] [FcTryHard/INFO]: Incomplete command. See below for error
+[12:20:41] [FcTryHard/INFO]: broadcast <message> <==
+broadcast
+[12:21:4] [FcTryHard/INFO]: Incomplete command. See below for error
+[12:21:4] [FcTryHard/INFO]: broadcast \<message\> <==
+broadcast
+[12:21:32] [FcTryHard/INFO]: Incomplete command. See below for error
+[12:21:32] [FcTryHard/INFO]: broadcast [message] <==
+broa
+test
+a
+[12:22:48] [FcTryHard/INFO]: Unknown command. Type 'help' for help.
+broedca
+[12:22:51] [FcTryHard/INFO]: Unknown command. Type 'help' for help.
+broadcast
+[12:22:54] [FcTryHard/INFO]: Incomplete command. See below for error
+[12:22:54] [FcTryHard/INFO]: broadcast [message] <==
+broadcast lol
+[12:22:58] [FcTryHard/INFO]: Message 'lol' envoyé sur le salon 'général'
+broadcast Ceci est un message envoyé depuis le console du site web
+[12:23:15] [FcTryHard/INFO]: Message 'Ceci est un message envoyé depuis le console du site web' envoyé sur le salon 'général'
+database
+[12:24:28] [FcTryHard/INFO]: Unknown command. Type 'help' for help.
+db
+[12:29:35] [FcTryHard/INFO]: Nobody found in the database
+db
+[12:29:47] [FcTryHard/INFO]: User ID: 272800993933262858
+Pseudo: Faiizer
+Registered ID: None
+Quest Completed: 0
+Vote1 Completed: 0
+Vote2 Completed: 0
+Last Pets Time: 2024-09-12T12:29:44.604581+02:00
+
+
+database
+[12:31:31] [FcTryHard/INFO]: User ID: 272800993933262858
+[12:31:31] [FcTryHard/INFO]: Pseudo: Faiizer
+[12:31:31] [FcTryHard/INFO]: Registered ID: None
+[12:31:31] [FcTryHard/INFO]: Quest Completed: 0
+[12:31:31] [FcTryHard/INFO]: Vote1 Completed: 0
+[12:31:31] [FcTryHard/INFO]: Vote2 Completed: 0
+[12:31:31] [FcTryHard/INFO]: Last Pets Time: 2024-09-12T12:29:44.604581+02:00
+[12:31:31] [FcTryHard/INFO]: 
+[12:31:31] [FcTryHard/INFO]: 
+db
+[12:32:20] [FcTryHard/INFO]: User ID: 272800993933262858
+[12:32:20] [FcTryHard/INFO]: Pseudo: Faiizer
+[12:32:20] [FcTryHard/INFO]: Registered ID: None
+[12:32:20] [FcTryHard/INFO]: Quest Completed: 0
+[12:32:20] [FcTryHard/INFO]: Vote1 Completed: 0
+[12:32:20] [FcTryHard/INFO]: Vote2 Completed: 0
+[12:32:20] [FcTryHard/INFO]: Last Pets Time: 2024-09-12T12:29:44.604581+02:00

@@ -5,16 +5,12 @@ import pytz
 from discord import app_commands
 from discord.ext import commands, tasks
 
+from scripts_utils.logs_manager import logs
+
 from blocaria import methods_vote
-from database import (
-    add_user_db,
-    get_all_users_db,
-    get_user_db,
-    init_db,
-    remove_user_db,
-    update_user_db,
-    user_exists_db,
-)
+from database import (add_user_db, get_all_users_db, get_user_db, init_db,
+                      remove_user_db, update_user_db, user_exists_db,
+                      user_dont_exist_db)
 from scripts_utils import embed_manager
 
 tz = pytz.timezone('Europe/Paris')
@@ -31,7 +27,7 @@ class Join(commands.Cog):
         description="Indicates that the player has joined the server")
     async def join(self, interaction: discord.Interaction, pseudo: str):
         if pseudo is not None:
-            if user_exists_db(interaction.user.id):
+            if not user_dont_exist_db(interaction.user.id):
                 await interaction.response.send_message(
                     "⚠️ - **Vous avez déjà lancé vos notifications personnelles !** ❌",
                     delete_after=5,
@@ -43,6 +39,12 @@ class Join(commands.Cog):
                         delete_after=5,
                         ephemeral=True)
                     await send_first_personnal_notifications(interaction.user)
+                    logs(
+                        "blocaria_join", {
+                            "user_name": str(interaction.user.name),
+                            "user_id": str(interaction.user.id),
+                            "pseudo": str(pseudo)
+                        })
 
 
 # COMMAND '/leave' : Indicates that the player has leaved the server
@@ -61,6 +63,11 @@ class Leave(commands.Cog):
                     "🥳 - **Super ! Vous avez stoppé vos notifications personnelles !** ✅",
                     delete_after=5,
                     ephemeral=True)
+                logs(
+                    "blocaria_leave", {
+                        "user_name": str(interaction.user.name),
+                        "user_id": str(interaction.user.id)
+                    })
         else:
             await interaction.response.send_message(
                 "⚠️ - **Vous n'avez pas lancé vos notifications personnelles !** ❌",
@@ -116,6 +123,10 @@ class PersonnalNotifications(commands.Cog):
                     embed = await embed_manager.get_embed("blocaria", "pets")
                     await user.send(f"{user.mention}", embed=embed)
                     update_user_db(key, {"last_pets_time": now.isoformat()})
+                    logs("blocaria_pets", {
+                        "user_name": str(user.name),
+                        "user_id": str(user.id)
+                    })
 
                 # VOTES
                 pseudo = value["pseudo"]
@@ -131,6 +142,12 @@ class PersonnalNotifications(commands.Cog):
                                 await user.send(
                                     f"{user.mention}, [vote en cliquant ici](https://blocaria.fr/vote)",
                                     embed=embed)
+                                logs(
+                                    "blocaria_vote", {
+                                        "user_name": str(user.name),
+                                        "user_id": str(user.id),
+                                        "id": str(1)
+                                    })
                         else:
                             if value['vote1_completed'] is not False:
                                 update_user_db(key, {"vote1_completed": False})
@@ -143,6 +160,12 @@ class PersonnalNotifications(commands.Cog):
                                 await user.send(
                                     f"{user.mention}, [vote en cliquant ici](https://blocaria.fr/vote)",
                                     embed=embed)
+                                logs(
+                                    "blocaria_vote", {
+                                        "user_name": str(user.name),
+                                        "user_id": str(user.id),
+                                        "id": str(2)
+                                    })
                         else:
                             if value['vote2_completed'] is not False:
                                 update_user_db(key, {"vote2_completed": False})
@@ -154,6 +177,10 @@ class PersonnalNotifications(commands.Cog):
                     embed = await embed_manager.get_embed(
                         "blocaria", "vip_rewards")
                     await user.send(f"{user.mention}", embed=embed)
+                    logs("blocaria_vip&rewards", {
+                        "user_name": str(user.name),
+                        "user_id": str(user.id)
+                    })
 
                 # JOBS QUEST NOTIFICATION
                 if now.hour == 10 and now.minute == 00:
@@ -166,6 +193,10 @@ class PersonnalNotifications(commands.Cog):
                         "registered_id": message.id,
                         "quest_completed": False
                     })
+                    logs("blocaria_jobs", {
+                        "user_name": str(user.name),
+                        "user_id": str(user.id)
+                    })
 
                 if now.hour == 15 and now.minute == 00 and value[
                         'quest_completed']:
@@ -175,6 +206,10 @@ class PersonnalNotifications(commands.Cog):
                     message = await user.send(f"{user.mention}", embed=embed)
                     await message.add_reaction("✅")
                     update_user_db(user_id, {"registered_id": message.id})
+                    logs("blocaria_jobs", {
+                        "user_name": str(user.name),
+                        "user_id": str(user.id)
+                    })
 
                 if now.hour == 20 and now.minute == 00 and not value[
                         'quest_completed']:
@@ -184,6 +219,10 @@ class PersonnalNotifications(commands.Cog):
                     message = await user.send(f"{user.mention}", embed=embed)
                     await message.add_reaction("✅")
                     update_user_db(user_id, {"registered_id": message.id})
+                    logs("blocaria_jobs", {
+                        "user_name": str(user.name),
+                        "user_id": str(user.id)
+                    })
 
 
 async def setup(bot):

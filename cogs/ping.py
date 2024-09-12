@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-from scripts_utils import logs_manager
+from scripts_utils.logs_manager import logs
 
 
 class Ping(commands.Cog):
@@ -13,7 +13,7 @@ class Ping(commands.Cog):
         # await ctx.send("Pong from the Ping!")
 
         await ctx.send("Pong!")
-        logs_manager.logs("test")
+        logs("test")
 
 
 async def setup(bot):

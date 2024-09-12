@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="{{ url_for('static', filename='styles.css') }}"
+        />
+        <link
+            rel="icon"
+            type="image/x-icon"
+            href="{{ url_for('static', filename='images/favicon.png') }}"
+        />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+            rel="stylesheet"
+        />
+        <title>FC-Tryhard BOT - Logs</title>
+    </head>
+
+    <body>
+        <main>
+            <section class="w-full">
+                <img
+                    class="background"
+                    src="{{ url_for('static', filename='images/landing_background.png') }}"
+                />
+                <div class="header">
+                    <div class="logo">
+                        <h2 class="title">
+                            <a class="navigation_text" href="/">Accueil</a>/Logs
+                            du bot
+                        </h2>
+                    </div>
+                </div>
+            </section>
+            <section class="content-container">
+                <div class="logs_container">
+                    <div class="logs_sidebar">
+                        <div class="logs_menu">
+                            <span class="logs_menu_items" onclick="refreshLogs()">
+                                REFRESH
+                            </span>
+                            <span>
+                                 | 
+                            </span>
+                            <span class="logs_menu_items" onclick="closeLogs()">
+                                CLEAR
+                            </span>
+                            <span>
+                                 | 
+                            </span>
+                            <span class="logs_menu_items" onclick="printLogs()">
+                                PRINT
+                            </span>
+                        </div>
+                        <div class="logs_explorator">
+                            {% for file in files %}
+                            <p>
+                                >
+                                <a
+                                    class="logs_file"
+                                    onclick="loadLog('{{ file }}')"
+                                    >{{ file }}</a
+                                >
+                            </p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="logs_console">
+                        <div id="log-title"></div>
+                        <div id="log-content">
+                            <span>
+                                Ici s'afficheront les logs du fichier
+                                sélectionné.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+    </body>
+</html>

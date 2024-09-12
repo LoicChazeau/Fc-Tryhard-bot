@@ -1,5 +1,7 @@
 import sqlite3
 
+from scripts_utils.logs_manager import logs
+
 # Initialiser la base de données SQLite
 # def init_db():
 #     conn = sqlite3.connect(
@@ -187,15 +189,8 @@ def init_db() -> bool:
         conn.commit()
         conn.close()
     except Exception as e:
-        print("")
-        print("> [ERROR] > database.py -> init_db()")
-        print(f"> {e} <")
-        print("")
+        logs("db_initError", {"error": e})
         return False
-    print("")
-    print("> [SUCCESS] > database.py -> init_db()")
-    print(f"-> {query}")
-    print("")
     return True
 
 
@@ -211,22 +206,37 @@ def user_exists_db(user_id):
     try:
         verification = get_user_db(user_id)
         if verification:
-            print("")
-            print(f"> [SUCCESS] > database.py -> user_exists({user_id})")
-            print(f"-> {verification}")
-            print("")
             return True
-        print("")
-        print(f"> [ERROR-bis] > database.py -> user_exists({user_id})")
-        print(f"-> {verification}")
-        print("-> Return: None")
-        print("")
+        logs("db_userExistsError2", {
+            "user_id": user_id,
+            "verification": verification
+        })
         return False
     except Exception as e:
-        print("")
-        print(f"> [ERROR] > database.py -> user_exists({user_id})")
-        print(f"> {e} <")
-        print("")
+        logs("db_userExistsError1", {"user_id": user_id, "error": e})
+        return False
+
+
+def user_dont_exist_db(user_id):
+    """
+    ### Search a user not in the db
+    **Arguments :**
+    - user_id: *str* (discord user id)
+
+    **Returns :**
+    - *object* (None = success, True = failure)
+    """
+    try:
+        verification = get_user_db(user_id)
+        if verification:
+            logs("db_userDontExistError2", {
+                "user_id": user_id,
+                "verification": verification
+            })
+            return False
+        return True
+    except Exception as e:
+        logs("db_userDontExistError1", {"user_id": user_id, "error": e})
         return False
 
 
@@ -252,16 +262,12 @@ def add_user_db(user_id: int, pseudo: str) -> bool:
         conn.commit()
         conn.close()
     except Exception as e:
-        print("")
-        print(f"> [ERROR] > database.py -> add_user_db({user_id}, {pseudo})")
-        print(f"> {e} <")
-        print("")
+        logs("db_addUserError", {
+            "user_id": user_id,
+            "pseudo": pseudo,
+            "error": e
+        })
         return False
-    print("")
-    print(f"> [SUCCESS] > database.py -> add_user_db({user_id}, {pseudo})")
-    print(f"-> {query}")
-    print(f"-> {values}")
-    print("")
     return True
 
 
@@ -288,16 +294,12 @@ def update_user_db(user_id: int, value: dict) -> bool:
         conn.commit()
         conn.close()
     except Exception as e:
-        print("")
-        print(f"> {e} <")
-        print(f"> [ERROR] > database.py -> update_user_db({user_id}, {value})")
-        print("")
+        logs("db_updateUserError", {
+            "user_id": user_id,
+            "value": value,
+            "error": e
+        })
         return False
-    print("")
-    print(f"> [SUCCESS] > database.py -> update_user_db({user_id}, {value})")
-    print(f"-> {query}")
-    print(f"-> {values}")
-    print("")
     return True
 
 
@@ -319,16 +321,8 @@ def remove_user_db(user_id: int) -> bool:
         conn.commit()
         conn.close()
     except Exception as e:
-        print("")
-        print(f"> {e} <")
-        print(f"> [ERROR] > database.py -> remove_user_db({user_id})")
-        print("")
+        logs("db_removeUserError", {"user_id": user_id, "error": e})
         return False
-    print("")
-    print(f"> [SUCCESS] > database.py -> remove_user_db({user_id})")
-    print(f"-> {query}")
-    print(f"-> {values}")
-    print("")
     return True
 
 
@@ -378,33 +372,24 @@ def get_user_db(user_id: int) -> dict:
                 print("")
                 return user
     except Exception as e:
-        print("")
-        print(f"> {e} <")
-        print(f"> [ERROR] > database.py -> get_user_db({user_id})")
-        print("")
+        logs("db_getUserError", {"error": e})
         return None
-    print("")
-    print(f"> [SUCCESS-bis] > database.py -> get_user_db({user_id})")
-    print(f"-> {query}")
-    print(f"-> {values}")
-    print("-> Return: None")
-    print("")
     return None
 
 
 def get_all_users_db() -> dict:
     """
-    ### Retrieve all users from the db    
+    ### Retrieve all users from the db
     **Returns :**
     - *dict* (None = failure)
 
-    `{"user_id": 
-    {"user_id": id[0], 
+    `{"user_id":
+    {"user_id": id[0],
     "pseudo": id[1],
-    "registered_id": id[2], 
-    "quest_completed": id[3], 
-    "vote1_completed": id[4], 
-    "vote2_completed": id[5], 
+    "registered_id": id[2],
+    "quest_completed": id[3],
+    "vote1_completed": id[4],
+    "vote2_completed": id[5],
     "last_pets_time": id[6]}`
 
     """
@@ -429,15 +414,8 @@ def get_all_users_db() -> dict:
         }
 
     except Exception as e:
-        print("")
-        print(f"> {e} <")
-        print("> [ERROR] > database.py -> get_all_users_db()")
-        print("")
+        logs("db_getAllUsersError", {"error": e})
         return None
-    print("")
-    print("> [SUCCESS] > database.py -> get_all_users_db()")
-    print(f"-> Return: {all_users}")
-    print("")
     return all_users
 
 

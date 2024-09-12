@@ -5,5 +5,83 @@
       "Une erreur est survenue lors de l'execution du logging.",
       "L'erreur est useless ici."
     ]
+  },
+
+  "db_getAllUsersError": {
+    "type": "Error",
+    "content": ["'get_all_users_db()' in 'database.py'.\n{error}\n"]
+  },
+  "db_getUserError": {
+    "type": "Error",
+    "content": ["'get_user_db()' in 'database.py'.\n{error}\n"]
+  },
+  "db_removeUserError": {
+    "type": "Error",
+    "content": ["'remove_user_db({user_id})' in 'database.py'.\n{error}\n"]
+  },
+  "db_updateUserError": {
+    "type": "Error",
+    "content": ["'update_user_db({user_id}, {value})' in 'database.py'.\n{error}\n"]
+  },
+  "db_addUserError": {
+    "type": "Error",
+    "content": ["'add_user_db({user_id}, {pseudo})' in 'database.py'.\n{error}\n"]
+  },
+  "db_userExistsError1": {
+    "type": "Error",
+    "content": ["'user_exists_db({user_id})' in 'database.py'.\n{error}\n"]
+  },
+  "db_userExistsError2": {
+    "type": "Error",
+    "content": ["'user_exists_db({user_id})' in 'database.py'.\n{verification}\n"]
+  },
+  "db_userDontExistError1": {
+    "type": "Error",
+    "content": ["'user_dont_exist_db({user_id})' in 'database.py'.\n{error}\n"]
+  },
+  "db_userDontExistError2": {
+    "type": "Error",
+    "content": ["'user_dont_exist_db({user_id})' in 'database.py'.\n{verification}\n"]
+  },
+  "db_initError": {
+    "type": "Error",
+    "content": ["'init_db()' in 'database.py'.\n{error}\n"]
+  },
+
+  "blocaria_join": {
+    "type": "Info",
+    "content": [
+      "'{user_name}' ({user_id}) a activé ses notifications personnelles (Blocaria) en tant que '{pseudo}'"
+    ]
+  },
+  "blocaria_leave": {
+    "type": "Info",
+    "content": [
+      "'{user_name}' ({user_id}) a désactivé ses notifications personnelles (Blocaria)"
+    ]
+  },
+  "blocaria_pets": {
+    "type": "Info",
+    "content": [
+      "'{user_name}' ({user_id}) a recu son rappel pour les pets (Blocaria)"
+    ]
+  },
+  "blocaria_vote": {
+    "type": "Info",
+    "content": [
+      "'{user_name}' ({user_id}) a recu son rappel pour le vote #{id} (Blocaria)"
+    ]
+  },
+  "blocaria_vip&rewards": {
+    "type": "Info",
+    "content": [
+      "'{user_name}' ({user_id}) a recu son rappel pour les vip & rewards (Blocaria)"
+    ]
+  },
+  "blocaria_jobs": {
+    "type": "Info",
+    "content": [
+      "'{user_name}' ({user_id}) a recu son rappel pour la quête journalière '/jobs' (Blocaria)"
+    ]
   }
 }

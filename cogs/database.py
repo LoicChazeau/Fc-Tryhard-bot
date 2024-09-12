@@ -2,10 +2,11 @@ import asyncio
 import discord
 from discord import Embed, app_commands
 from discord.ext import commands
-from database import get_all_users, get_all_users_db  # Importez la fonction pour récupérer les utilisateurs
+from database import get_all_users, get_all_users_db
 from datetime import datetime, timedelta
 
 admin = 866688547078668308
+admin2= 1280234769573216389
 
 
 # Database admin commande
@@ -23,7 +24,7 @@ class Database(commands.Cog):
         assert member is not None
 
         # Vérifiez si l'utilisateur a le rôle d'admin
-        if guild.get_role(admin) in member.roles:
+        if guild.get_role(admin) or guild.get_role(admin2) in member.roles:
 
             # Récupérer toutes les données des utilisateurs depuis la base de données
             all_users = get_all_users_db()
