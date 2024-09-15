@@ -190,3 +190,33 @@ db
 [12:32:20] [FcTryHard/INFO]: Vote1 Completed: 0
 [12:32:20] [FcTryHard/INFO]: Vote2 Completed: 0
 [12:32:20] [FcTryHard/INFO]: Last Pets Time: 2024-09-12T12:29:44.604581+02:00
+help
+[13:7:30] [FcTryHard/INFO]: -------------------- HELP --------------------
+[13:7:30] [FcTryHard/INFO]: ? 'help': send this help message
+[13:7:30] [FcTryHard/INFO]: ? 'database': send the database
+[13:7:30] [FcTryHard/INFO]: ? 'broadcast': send a @everyone in discord
+[13:7:30] [FcTryHard/INFO]: -------------------- HELP --------------------
+database
+[13:7:44] [FcTryHard/INFO]: User ID: 272800993933262858
+[13:7:44] [FcTryHard/INFO]: Pseudo: Faiizer
+[13:7:44] [FcTryHard/INFO]: Registered ID: 1283849862479220797
+[13:7:44] [FcTryHard/INFO]: Quest Completed: 0
+[13:7:44] [FcTryHard/INFO]: Vote1 Completed: 1
+[13:7:44] [FcTryHard/INFO]: Vote2 Completed: 0
+[13:7:44] [FcTryHard/INFO]: Last Pets Time: 2024-09-13T13:07:14.999042+02:00
+database t
+[13:7:47] [FcTryHard/INFO]: User ID: 272800993933262858
+[13:7:47] [FcTryHard/INFO]: Pseudo: Faiizer
+[13:7:47] [FcTryHard/INFO]: Registered ID: 1283849862479220797
+[13:7:47] [FcTryHard/INFO]: Quest Completed: 0
+[13:7:47] [FcTryHard/INFO]: Vote1 Completed: 1
+[13:7:47] [FcTryHard/INFO]: Vote2 Completed: 0
+[13:7:47] [FcTryHard/INFO]: Last Pets Time: 2024-09-13T13:07:14.999042+02:00
+db
+[13:7:49] [FcTryHard/INFO]: User ID: 272800993933262858
+[13:7:49] [FcTryHard/INFO]: Pseudo: Faiizer
+[13:7:49] [FcTryHard/INFO]: Registered ID: 1283849862479220797
+[13:7:49] [FcTryHard/INFO]: Quest Completed: 0
+[13:7:49] [FcTryHard/INFO]: Vote1 Completed: 1
+[13:7:49] [FcTryHard/INFO]: Vote2 Completed: 0
+[13:7:49] [FcTryHard/INFO]: Last Pets Time: 2024-09-13T13:07:14.999042+02:00

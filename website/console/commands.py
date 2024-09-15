@@ -24,12 +24,13 @@ async def ICommand_help(ctx):
     console_logs("info", [
         "-------------------- HELP --------------------",
         "? 'help': send this help message",
+        "? 'database': send the database",
+        "? 'broadcast': send a @everyone in discord",
         "-------------------- HELP --------------------"
     ])
 
 
 async def discord_database(ctx):
-    bot = ctx["bot"]
     all_users = get_all_users_db()
 
     desc = ""

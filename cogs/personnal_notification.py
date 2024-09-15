@@ -131,7 +131,8 @@ class PersonnalNotifications(commands.Cog):
                 # VOTES
                 pseudo = value["pseudo"]
                 available_vote_data = methods_vote.get_roles_status(pseudo)
-
+                print(f"Vote data for {pseudo}: {available_vote_data}")
+                
                 for keys in available_vote_data:
                     if keys['id'] == "serveur-prive":
                         if keys['available'] is True:
