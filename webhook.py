@@ -14,7 +14,7 @@ def git_update():
         os.system("pip install -r /home/ec2-user/Fc-Tryhard-bot/requirements.txt")
 
         # Démarrer ou redémarrer le bot
-        restart_bot()
+        # restart_bot()
         
         return 'Update and dependencies installation successful', 200
     else:
@@ -29,7 +29,7 @@ def restart_bot():
         os.system("pkill -f main.py")
 
     # Lancer le bot dans un nouvel écran (screen session)
-    os.system("screen -dmS bot_screen python3 /home/ec2-user/Fc-Tryhard-bot/main.py")
+    #os.system("screen -dmS bot_screen python3 /home/ec2-user/Fc-Tryhard-bot/main.py")
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)

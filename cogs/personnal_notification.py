@@ -107,6 +107,7 @@ class PersonnalNotifications(commands.Cog):
     @tasks.loop(minutes=1)  # Vérifie toutes les minutes
     async def personnal_notifications(self):
         await self.bot.wait_until_ready()
+        print("loop 1 minutes")
 
         # Obtenir tous les utilisateurs de la base de données
         onlines = get_all_users_db()
