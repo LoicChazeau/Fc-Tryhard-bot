@@ -1,5 +1,6 @@
 bot_database.db
 logs/
+/website/console/console.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
