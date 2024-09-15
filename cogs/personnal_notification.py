@@ -84,6 +84,7 @@ async def send_first_personnal_notifications(user):
 
 # Send the looped personnal notifications
 class PersonnalNotifications(commands.Cog):
+    print("PersonnalNotifications")
 
     def __init__(self, bot):
         self.bot = bot
